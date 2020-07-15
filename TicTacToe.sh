@@ -1,8 +1,8 @@
 #!/bin/bash +x
 echo "Welcome to Tic Tac Toe Problem"
-LETTER1=O
-LETTER2=X
-one=1
+LETTERO=O
+LETTERX=X
+
 declare -a board
 
 
@@ -20,13 +20,33 @@ function resetBoard()
 function tossToPlay()
 {
 	toss=$((RANDOM%2))
-	if [[ $toss -eq $one ]]
+	letterCheck=$((RANDOM%2))
+	if [[ $((RANDOM%2)) -eq 0 ]]
 	then
-		echo "Computer play first"
+		read -p "Choose a letter X or O:" l
+		if [[ $l == $LETTERX ]]
+      		then
+         		playerLetter=$l
+         		computerLetter=$LETTERO
+      		else
+         		playerLetter=$l
+         		computerLetter=$LETTERX
+      		fi
+		echo "Player will play first and he chooses letter $playerLetter And Computer letter is $computerLetter"
 	else
-		echo "Player plays first"
+                if [[ $letterCheck -eq $one ]]
+                then
+                        computerLetter=$LETTERO
+                        playerLetter=$LETTERX
+                else
+                        playerLetter=$LETTERO
+                        computerLetter=$LETTERX
+                fi
+		 echo "Computer will play first and he chooses letter $computerLetter And Player letter is $playerLetter"
+
 	fi
 }
+
 resetBoard
 displayBoard
 tossToPlay
