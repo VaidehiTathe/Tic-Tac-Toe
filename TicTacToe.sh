@@ -2,7 +2,9 @@
 echo "Welcome to Tic Tac Toe Problem"
 LETTER1=O
 LETTER2=X
+one=1
 declare -a board
+
 
 function displayBoard()
 {
@@ -14,5 +16,17 @@ function resetBoard()
 	board=(. . . . . . . . . .)
 }
 
+
+function tossToPlay()
+{
+	toss=$((RANDOM%2))
+	if [[ $toss -eq $one ]]
+	then
+		echo "Computer play first"
+	else
+		echo "Player plays first"
+	fi
+}
 resetBoard
 displayBoard
+tossToPlay
