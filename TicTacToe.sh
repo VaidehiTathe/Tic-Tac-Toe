@@ -27,11 +27,11 @@ function checkDraw()
         if [[ $countX -eq 5 && $countO -eq 4 ]] || [[ $countX -eq 4 && countO -eq 5 ]]
         then
                 echo "No one wins.Its a draw"
-                gameStop=1
+                stop=1
         elif [[ $countX -eq 4 && $countO -eq 5 ]]
         then
                 echo " No one wins.Its a draw"
-                gameStop=1
+                stop=1
         fi
 }
 
@@ -85,7 +85,7 @@ function myMove()
         fi
         displayBoard
         checkWinLoose
-        compMove $computerLetter
+        compMove
 }
 function playerChooseLetter()
 {
@@ -100,7 +100,7 @@ function playerChooseLetter()
                 computerLetter=X
         fi
         echo "Player will play first and he chooses letter $playerLetter And Computer letter is $computerLetter"
-        myMove $playerLetter $computerLetter
+        myMove 
 
 }
 
@@ -131,9 +131,15 @@ function tossToPlay()
                         ;;
         esac
 }
-
+function start()
+{
+	while (( $stop == 0 ))
+	do
+		tossToPlay
+	done
+}
 resetBoard
 tossToPlay
 displayBoard
-
+start
 
