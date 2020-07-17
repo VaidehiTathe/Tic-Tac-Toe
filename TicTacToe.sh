@@ -1,68 +1,51 @@
-#!/bin/bash +x
-echo "Welcome to Tic Tac Toe Problem"
-LETTERO=O
-LETTERX=X
+NUM_ROWS=3
+NUM=COLS=3
+BOARD_SIZE=$((NUM_ROWS*NUM_COLS))
+
+position=0
 declare -a board
-playerSwitch=1
 
-function displayBoard()
+function resetPlayBoard()
 {
-	echo -e "| ${board[0]} | ${board[1]} | ${board[2]} |\n_____________\n| ${board[3]} | ${board[4]} | ${board[5]} |\n_____________\n| ${board[6]} | ${board[7]} | ${board[8]} |"
-
+	board=(- - - - - - - - -)
 }
 
-function resetBoard()
+
+function toss()
 {
-	board=(. . . . . . . . .)
+	random=$((RANDOM%2))
+		if [ $random -eq 0 ]
+		then
+			read -p "Player will play first,choose your letter X or O" input
+				if [[ $input == X ]]
+				then
+					userLetter=X;
+					compLetter=O;
+				else
+					userLetter=O;
+					compLetter=X;
+				fi
+		else
+			echo "Computer will play first"
+			choose=$((RANDOM%2))
+				if [ $choose -eq 0 ]
+				then
+					userLetter=O;
+					compLetter=X;
+				else
+					userLetter=X;
+					compLetter=O;
+				fi
+
+		fi
 }
-
-function playerChooseLetter()
-{
-
-	read -p "Choose a letter X or O:" l
-        if [[ $l == $LETTERX ]]
-        then
-                playerLetter=$l
-                computerLetter=$LETTERO
-        else
-                playerLetter=$l
-               	computerLetter=$LETTERX
-        fi
-        echo "Player will play first and he chooses letter $playerLetter And Computer letter is $computerLetter"
-
-
+function displayBoard(){
+		for (( rcount=0;rcount<${#board[@]};))
+		do
+			echo "|${playBoard[rcount]}|${playBoard[rcount+1]}|${playBoard[rcount+2]}|"
+			rcount=$((rcount+3))
+		done
 }
-
-function computerChooseLetter()
-{
-	letterCheck=$((RANDOM%2))
-	if [[ $letterCheck -eq $one ]]
-	then
-        	computerLetter=$LETTERO
-               	playerLetter=$LETTERX
-        else
-                playerLetter=$LETTERO
-                computerLetter=$LETTERX
-        fi
-        echo "Computer will play first and he chooses letter $computerLetter And Player letter is $playerLetter"
-
-
-}
-
-function tossToPlay()
-{
-	toss=$((RANDOM%2))
-	case $toss in
-		0)
-			playerChooseLetter
-			;;
-		1)
-			computerChooseLetter
-			;;
-	esac
-}
-
-resetBoard
-tossToPlay
+resetPlayBoard
+toss
 displayBoard
-
