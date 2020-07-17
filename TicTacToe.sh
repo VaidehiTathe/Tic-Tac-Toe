@@ -1,7 +1,7 @@
 #!/bin/bash +x
 echo "Welcome to Tic Tac Toe Problem"
-NUM_ROWS=3
-NUM=COLS=3
+ROWS=3
+COLS=3
 BOARD_SIZE=$((NUM_ROWS*NUM_COLS))
 
 position=0
