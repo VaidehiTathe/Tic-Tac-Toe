@@ -5,62 +5,65 @@ ROWS=3
 COLUMNS=3
 SIZE=$(($ROWS*$COLUMNS))
 count=0
+countX=0
+countO=0
 function resetBoard()
 {
 
-	board=(. . . . . . . . .)
+        board=(. . . . . . . . .)
 }
 
 function displayBoard()
 {
-	for (( count=0;count<${#board[@]};))
-	do
-		echo "|${board[count]} || ${board[count+1]} || ${board[count+2]} |"
-		count=$((count+3))
-	done
+        for (( count=0;count<${#board[@]};))
+        do
+                echo "|${board[count]} || ${board[count+1]} || ${board[count+2]}|"
+                count=$((count+3))
+        done
 }
 
 function checkDraw()
 {
-	if [[ $countX -eq 5 && $countO -eq 4 ]] || [[ $countX -eq 4 && countO -eq 5 ]]
-	then
-		echo "Its a draw"
-		gameStop=1
-	elif [[ $countX -eq 4 && $countO -eq 5 ]]
-	then
-		echo "Its a draw"
-		gameStop=1
-	fi
+        if [[ $countX -eq 5 && $countO -eq 4 ]] || [[ $countX -eq 4 && countO -eq 5 ]]
+        then
+                echo "No one wins.Its a draw"
+                gameStop=1
+        elif [[ $countX -eq 4 && $countO -eq 5 ]]
+        then
+                echo " No one wins.Its a draw"
+                gameStop=1
+        fi
 }
 
 
 function checkWin()
 {
-	
-	if [[ ${board[$1]} -ne "." ]] && [[ ${board[$1]} -eq ${board[$2]} ]] && [[ ${board[$2]} -eq ${board[$3]} ]]
-	then
-#		stop=1
-		echo "player wins"
-	else
+
+        if [[ ${board[$1]} != "." ]] && [[ ${board[$1]} -eq ${board[$2]} ]] && [[ ${board[$2]} == ${board[$3]} ]]
+        then
+                stop=1
+                echo "player wins"
+        fi
+#	break
 }
 function checkWinLoose()
 {
-	checkWin 0 1 2
-	checkWin 3 4 5
-	checkWin 6 7 8
-	checkWin 0 3 6
-	checkWin 1 4 7
-	checkWin 2 5 8
-	checkWin 0 4 8 
-	checkWin 2 4 6
+        checkWin 0 1 2
+        checkWin 3 4 5
+        checkWin 6 7 8
+        checkWin 0 3 6
+        checkWin 1 4 7
+        checkWin 2 5 8
+        checkWin 0 4 8
+        checkWin 2 4 6
 }
 
 function compMove()
 {
-	 read -p "Enter a position" position
+         read -p "Enter a position" position
         if [[ ${board[$((position-1))]} == "." ]]
         then
-                board[$((position-1))]=$playerLetter
+                board[$((position-1))]=$compLetter
         else
                 echo "Enter corect position"
                 myMove
@@ -72,17 +75,17 @@ function compMove()
 }
 function myMove()
 {
-	read -p "Enter a position" position
-	if [[ ${board[$((position-1))]} == "." ]]
-	then
-		board[$((position-1))]=$playerLetter
-	else
-		echo "Enter corect position"
-		myMove
-	fi
-	displayBoard
-	checkWinLoose
-	compMove
+        read -p "Enter a position" position
+        if [[ ${board[$((position-1))]} == "." ]]
+        then
+                board[$((position-1))]=$playerLetter
+        else
+                echo "Enter corect position"
+                myMove
+        fi
+        displayBoard
+        checkWinLoose
+        compMove
 }
 function playerChooseLetter()
 {
@@ -97,7 +100,7 @@ function playerChooseLetter()
                 computerLetter=X
         fi
         echo "Player will play first and he chooses letter $playerLetter And Computer letter is $computerLetter"
-	myMove
+        myMove
 
 }
 
@@ -112,8 +115,8 @@ function computerChooseLetter()
                 playerLetter=O
                 computerLetter=X
         fi
-        echo "Computer will play first and he chooses letter $computerLetter And Player letter is $playerLetter"
-	compMove
+        echo "Computer will play first and he chooses letter $computerLetter And player letter is $plyerLetter"
+        compMove
 }
 
 function tossToPlay()
@@ -132,3 +135,5 @@ function tossToPlay()
 resetBoard
 tossToPlay
 displayBoard
+
+
