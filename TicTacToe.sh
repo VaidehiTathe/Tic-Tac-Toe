@@ -1,25 +1,29 @@
 #!/bin/bash +x
 echo "Welcome to Tic Tac Toe Problem"
-LETTER1=O
-LETTER2=X
-one=1
+NUM_ROWS=3
+NUM=COLS=3
+BOARD_SIZE=$((NUM_ROWS*NUM_COLS))
+
+position=0
 declare -a board
 
-function resetBoard()
+function resetPlayBoard()
 {
-	board=(. . . . . . . . . .)
+	for((position=1;position<=BOARD_SIZE;position++))
+	do
+		board[$position]=0;
+	done
 }
 
 
-function tossToPlay()
+function toss()
 {
-	toss=$((RANDOM%2))
-	if [[ $toss -eq $one ]]
-	then
-		echo "Computer will play first"
-	else
-		echo "Player will plays first"
-	fi
+	random=$((RANDOM%2))
+		if [ $random -eq 0 ]
+		then
+			echo "Player will play first"
+		else
+			echo "Computer will play first"
+		fi
 }
-resetBoard
-tossToPlay
+toss
