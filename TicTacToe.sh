@@ -1,145 +1,206 @@
-#!/bin/bash +x
-echo "Welcome to Tic Tac Toe Problem"
-declare -a board
-ROWS=3
-COLUMNS=3
-SIZE=$(($ROWS*$COLUMNS))
-count=0
+NUM_ROWS=3
+NUM=COLS=3
+
+userLetterTemp=0
+chance=""
+player=0
+computer=0
+gameStop=0
 countX=0
 countO=0
-function resetBoard()
-{
 
-        board=(. . . . . . . . .)
+declare -a playBoard
+
+function resetPlayBoard()
+{
+	playBoard=(- - - - - - - - -)
 }
+
+
+function toss()
+{
+	random=$((RANDOM%2))
+	if [[ $random -eq 0 ]]
+	then
+		chance="player";
+		((countX++))
+		read -p "Players chance first,choose your letter X or O " input
+		if [[ $input == X ]]
+		then
+			userLetter=X;
+		else
+			userLetter=O;
+		fi
+	else
+		echo "Computers chance first"
+		chance="computer";
+		((countO++))
+		choose=$((RANDOM%2))
+		if [ $choose -eq 0 ]
+		then
+			compLetter=O;
+		else
+			compLetter=X;
+		fi
+	fi
+}
+
+function symbolAssign()
+{
+	if [[ $chance == player &&  $userLetter == X ]]
+	then
+		compLetter=O
+
+	else
+		compLetter=X
+	fi
+	if [[ $chance == computer &&  $compLetter == X ]]
+	then
+		userLetter=O
+	else
+		userLetter=X
+	fi
+}	
+function computerPlay(){
+	val=$(((RANDOM%9)+1))
+	computerMove $val
+}
+function checkDraw()
+{
+	if [[ $countX -eq 5 && $countO -eq 4 ]] || [[ $countX -eq 4 && $countO -eq 5 ]]
+	then
+		echo "its a draw"
+	        gameStop=1;
+	elif [[ $countX -eq 4 && $countO -eq 5 ]]
+   	then
+		echo "its a draw"
+		gameStop=1;
+	fi
+}
+
+function chanceSwitch()
+{
+	if [[ $chance == player ]]
+	then
+		((countO++))
+		computer
+	elif [[ $chance == computer ]]
+	then
+		((countX++))
+		user
+	else
+		echo "Error"
+	fi
+}
+
+function user()
+{
+	chance="player"
+	userLetterTemp=$userLetter
+}
+
+function computer()
+{
+	chance="computer"
+	userLetterTemp=$compLetter
+}
+
 
 function displayBoard()
 {
-        for (( count=0;count<${#board[@]};))
-        do
-                echo "|${board[count]} || ${board[count+1]} || ${board[count+2]}|"
-                count=$((count+3))
-        done
+	echo "Game Board At Display"
+	for (( count=0;count<${#playBoard[@]};))
+	do
+		echo "|${playBoard[count]}|${playBoard[count+1]}|${playBoard[count+2]}|"
+		count=$((count+3))
+	done
 }
 
-function checkDraw()
+function checkChance()
 {
-        if [[ $countX -eq 5 && $countO -eq 4 ]] || [[ $countX -eq 4 && countO -eq 5 ]]
-        then
-                echo "No one wins.Its a draw"
-                stop=1
-        elif [[ $countX -eq 4 && $countO -eq 5 ]]
-        then
-                echo " No one wins.Its a draw"
-                stop=1
-        fi
+	for (( countV=0; countV<${#playBoard[@]};countV++ ))
+	do
+		if [[ ${playBoard[countV]} == "-" ]]
+		then
+			chanceSwitch
+		break;
+		fi
+	done
 }
-
 
 function checkWin()
 {
-
-        if [[ ${board[$1]} != "." ]] && [[ ${board[$1]} -eq ${board[$2]} ]] && [[ ${board[$2]} == ${board[$3]} ]]
-        then
-                stop=1
-                echo "player wins"
-        fi
-#	break
+	if [[ ${playBoard[$1]} != "-" ]] && [[ ${playBoard[$1]} == ${playBoard[$2]} ]] && [[ ${playBoard[$2]} == ${playBoard[$3]} ]]
+	then
+		gameStop=1
+		echo "$chance Wins"
+	fi
 }
+
 function checkWinLoose()
 {
-        checkWin 0 1 2
-        checkWin 3 4 5
-        checkWin 6 7 8
-        checkWin 0 3 6
-        checkWin 1 4 7
-        checkWin 2 5 8
-        checkWin 0 4 8
-        checkWin 2 4 6
+	checkWin 0 1 2
+	checkWin 3 4 5
+	checkWin 6 7 8
+	checkWin 0 3 6
+	checkWin 1 4 7
+	checkWin 2 5 8
+	checkWin 0 4 8
+	checkWin 2 4 6
+}
+function userInputPosition()
+{
+	echo "players chance,Please enter a position to insert"
+	read user_input
+	yourMove $user_input
 }
 
-function compMove()
+function yourMove()
 {
-        read -p "Enter a position" position
-        if [[ ${board[$((position))]} == "." ]]
-        then
-                board[$((position))]=$compLetter
-        else
-                echo "Enter corect position"
-                compMove
-        fi
-        displayBoard
-        checkWinLoose
-        myMove
-
-}
-function myMove()
-{
-        read -p "Enter a position" position
-        if [[ ${board[$((position))]} == "." ]]
-        then
-                board[$((position))]=$playerLetter
-        else
-                echo "Enter corect position"
-                myMove
-        fi
-        displayBoard
-        checkWinLoose
-        compMove
-}
-function playerChooseLetter()
-{
-
-        read -p "Choose a letter X or O:" letter
-        if [[ $letter == X ]]
-        then
-                playerLetter=X
-                computerLetter=O
-        else
-                playerLetter=O
-                computerLetter=X
-        fi
-        echo "Player will play first and he chooses letter $playerLetter And Computer letter is $computerLetter"
-        myMove 
-
+	pos=$1
+	if [[ ${playBoard[$((pos-1))]} == "-" ]]
+	then
+		playBoard[$((pos-1))]=$userLetter
+	else
+		userInputPosition
+	fi
 }
 
-function computerChooseLetter()
+function computerMove()
 {
-        letterCheck=$((RANDOM%2))
-        if [[ $letterCheck -eq $one ]]
-        then
-                computerLetter=O
-                playerLetter=X
-        else
-                playerLetter=O
-                computerLetter=X
-        fi
-        echo "Computer will play first and he chooses letter $computerLetter And player letter is $plyerLetter"
-        compMove
+	pos=$1
+	if [[ ${playBoard[$((pos-1))]} == "-" ]]
+	then
+   		playBoard[$((pos-1))]=$compLetter
+	else
+		computerPlay
+	fi
 }
 
-function tossToPlay()
+function gamePlay()
 {
-        toss=$((RANDOM%2))
-        case $toss in
-                0)
-                        playerChooseLetter
-                        ;;
-                1)
-                        computerChooseLetter
-                        ;;
-        esac
+	case $chance in
+	player)
+		userInputPosition
+		displayBoard
+		checkWinLoose
+		checkDraw
+		checkChance
+			;;
+	computer)
+		computerPlay
+		displayBoard
+		checkWinLoose
+		checkDraw
+		checkChance
+			;;
+	esac
 }
-function start()
-{
-	while (( $stop == 0 ))
-	do
-		tossToPlay
-	done
-}
-resetBoard
-tossToPlay
+resetPlayBoard
+toss
+symbolAssign
 displayBoard
-start
-
+while (( $gameStop == 0 ))
+do
+	gamePlay
+done
