@@ -60,13 +60,13 @@ function checkWinLoose()
 
 function compMove()
 {
-         read -p "Enter a position" position
-        if [[ ${board[$((position-1))]} == "." ]]
+        read -p "Enter a position" position
+        if [[ ${board[$((position))]} == "." ]]
         then
-                board[$((position-1))]=$compLetter
+                board[$((position))]=$compLetter
         else
                 echo "Enter corect position"
-                myMove
+                compMove
         fi
         displayBoard
         checkWinLoose
@@ -76,16 +76,16 @@ function compMove()
 function myMove()
 {
         read -p "Enter a position" position
-        if [[ ${board[$((position-1))]} == "." ]]
+        if [[ ${board[$((position))]} == "." ]]
         then
-                board[$((position-1))]=$playerLetter
+                board[$((position))]=$playerLetter
         else
                 echo "Enter corect position"
                 myMove
         fi
         displayBoard
         checkWinLoose
-        compMove
+        compMove $computerLetter
 }
 function playerChooseLetter()
 {
@@ -100,7 +100,7 @@ function playerChooseLetter()
                 computerLetter=X
         fi
         echo "Player will play first and he chooses letter $playerLetter And Computer letter is $computerLetter"
-        myMove
+        myMove $playerLetter $computerLetter
 
 }
 
