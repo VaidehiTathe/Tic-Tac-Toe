@@ -1,13 +1,17 @@
 #!/bin/bash +x
 echo "Welcome to Tic Tac Toe Problem"
-LETTER1=O
-LETTER2=X
+NUM_ROWS=3
+NUM=COLS=3
+BOARD_SIZE=$((NUM_ROWS*NUM_COLS))
+
+position=0
 declare -a board
+function resetPlayBoard()
 
-function resetBoard()
 {
-	board=(. . . . . . . . . .)
+	for((position=1;position<=BOARD_SIZE;position++))
+	do
+		board[$position]=0;
+	done
 }
-
-resetBoard
-
+resetPlayBoard
